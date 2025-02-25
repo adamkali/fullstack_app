@@ -92,14 +92,14 @@ func TestLoginWithUsername(t *testing.T) {
 		Email:    "testing3@mail.com",
 		Password: "testing3",
 		IsAdmin:  true,
-    })
+	})
 	if err != nil {
 		t.Fatalf(`UserService.SignUp(params) did not create a user: %v`, err)
 	}
 	gotUser, err := us.Login(&requests.LoginRequest{
 		Username: "testing3",
 		Password: "testing3",
-    })
+	})
 	if err != nil {
 		t.Fatalf(`UserService.GetUserById(%s) did not create a user: %v`, user.ID.String(), err)
 	}
@@ -138,4 +138,5 @@ func TestLoginWithEmail(t *testing.T) {
     if err = us.RemoveUser(user.ID); err != nil {
         t.Fatalf(`UserService.RemoveUser(%s) did not delete: %v`, user.ID.String(), err)
     }
+
 }
