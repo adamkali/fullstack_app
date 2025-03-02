@@ -12,8 +12,8 @@ SELECT *
 
 -- name: UpdateTokenByUserId :exec
 UPDATE tokens 
-    SET token = $1, expiration_datetime = now()
-    WHERE user_id = $2;
+    SET token = $1, expiration_datetime = $2
+    WHERE user_id = $3;
 
 -- name: CreateToken :one
 INSERT INTO tokens (

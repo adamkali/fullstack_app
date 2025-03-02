@@ -36,7 +36,7 @@ func CreateUserService(ctx context.Context, conn *pgx.Conn) *UserService {
 	return &UserService{ctx, conn}
 }
 
-func (UserService *UserService) SignUp(params *requests.NewUserRequest) (*repository.User, error) {
+func (UserService *UserService) Create(params *requests.NewUserRequest) (*repository.User, error) {
 	BCryptHash, err := hashPassword(params.Password)
 	if err != nil {
 		return nil, err
@@ -128,7 +128,7 @@ func (UserService *UserService) Login(params *requests.LoginRequest) (*repositor
 	return &user, nil
 }
 
-func (UserService *UserService) RemoveUser(user_id uuid.UUID) error {
+func (UserService *UserService) Remove(user_id uuid.UUID) error {
 	tx, err := UserService.conn.Begin(UserService.ctx)
 	if err != nil {
 		return err
@@ -142,7 +142,7 @@ func (UserService *UserService) RemoveUser(user_id uuid.UUID) error {
 	return nil
 }
 
-func (UserService *UserService) GetUserById(user_id uuid.UUID) (*repository.User, error) {
+func (UserService *UserService) Get(user_id uuid.UUID) (*repository.User, error) {
 	tx, err := UserService.conn.Begin(UserService.ctx)
 	if err != nil {
 		return nil, err

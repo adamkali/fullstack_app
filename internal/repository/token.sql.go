@@ -7,9 +7,9 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createToken = `-- name: CreateToken :one
@@ -20,9 +20,9 @@ RETURNING id, user_id, expiration_datetime, token
 `
 
 type CreateTokenParams struct {
-	UserID             uuid.UUID        `json:"user_id"`
-	ExpirationDatetime pgtype.Timestamp `json:"expiration_datetime"`
-	Token              string           `json:"token"`
+	UserID             uuid.UUID  `json:"user_id"`
+	ExpirationDatetime *time.Time `json:"expiration_datetime"`
+	Token              string     `json:"token"`
 }
 
 func (q *Queries) CreateToken(ctx context.Context, arg CreateTokenParams) (Token, error) {
@@ -77,16 +77,17 @@ func (q *Queries) FindTokenByUserId(ctx context.Context, userID uuid.UUID) (Toke
 
 const updateTokenByUserId = `-- name: UpdateTokenByUserId :exec
 UPDATE tokens 
-    SET token = $1, expiration_datetime = now()
-    WHERE user_id = $2
+    SET token = $1, expiration_datetime = $2
+    WHERE user_id = $3
 `
 
 type UpdateTokenByUserIdParams struct {
-	Token  string    `json:"token"`
-	UserID uuid.UUID `json:"user_id"`
+	Token              string     `json:"token"`
+	ExpirationDatetime *time.Time `json:"expiration_datetime"`
+	UserID             uuid.UUID  `json:"user_id"`
 }
 
 func (q *Queries) UpdateTokenByUserId(ctx context.Context, arg UpdateTokenByUserIdParams) error {
-	_, err := q.db.Exec(ctx, updateTokenByUserId, arg.Token, arg.UserID)
+	_, err := q.db.Exec(ctx, updateTokenByUserId, arg.Token, arg.ExpirationDatetime, arg.UserID)
 	return err
 }

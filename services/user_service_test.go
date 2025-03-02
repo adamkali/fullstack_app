@@ -32,7 +32,7 @@ func TestCreateUser(t *testing.T) {
 	if err != nil {
 		t.Fatalf(`LoadUserService() did not create a user: %v`, err)
 	}
-	user, err := us.SignUp(&requests.NewUserRequest{
+	user, err := us.Create(&requests.NewUserRequest{
 		Username: "testing",
 		Email:    "testing@mail.com",
 		Password: "testing",
@@ -41,14 +41,14 @@ func TestCreateUser(t *testing.T) {
 	if err != nil {
 		t.Fatalf(`UserService.SignUp(params) did not create a user: %v`, err)
 	}
-	gotUser, err := us.GetUserById(user.ID)
+	gotUser, err := us.Get(user.ID)
 	if err != nil {
 		t.Fatalf(`UserService.GetUserById(%s) did not create a user: %v`, user.ID.String(), err)
 	}
 	if user.BCryptHash != gotUser.BCryptHash {
 		t.Fatalf(`UserService.GetUserById(%s) != UserService.SignUp(params)`, user.ID.String())
 	}
-    if err = us.RemoveUser(user.ID); err != nil {
+    if err = us.Remove(user.ID); err != nil {
         t.Fatalf(`UserService.RemoveUser(%s) did not delete: %v`, user.ID.String(),err)
     }
 }
@@ -58,7 +58,7 @@ func TestCreateAdminUser(t *testing.T) {
 	if err != nil {
 		t.Fatalf(`LoadUserService() did not create a user: %v`, err)
 	}
-	user, err := us.SignUp(&requests.NewUserRequest{
+	user, err := us.Create(&requests.NewUserRequest{
 		Username: "testing2",
 		Email:    "testing2@mail.com",
 		Password: "testing2",
@@ -67,7 +67,7 @@ func TestCreateAdminUser(t *testing.T) {
 	if err != nil {
 		t.Fatalf(`UserService.SignUp(params) did not create a user: %v`, err)
 	}
-	gotUser, err := us.GetUserById(user.ID)
+	gotUser, err := us.Get(user.ID)
 	if err != nil {
 		t.Fatalf(`UserService.GetUserById(%s) did not create a user: %v`, user.ID.String(), err)
 	}
@@ -77,7 +77,7 @@ func TestCreateAdminUser(t *testing.T) {
 	if !gotUser.Admin {
 		t.Fatalf(`UserService.SignUp(params) did not create an admin user`)
 	}
-    if err = us.RemoveUser(user.ID); err != nil {
+    if err = us.Remove(user.ID); err != nil {
         t.Fatalf(`UserService.RemoveUser(%s) did not delete: %v`, user.ID.String(), err)
     }
 }
@@ -87,7 +87,7 @@ func TestLoginWithUsername(t *testing.T) {
 	if err != nil {
 		t.Fatalf(`LoadUserService() did not initiate: %v`, err)
 	}
-	user, err := us.SignUp(&requests.NewUserRequest{
+	user, err := us.Create(&requests.NewUserRequest{
 		Username: "testing3",
 		Email:    "testing3@mail.com",
 		Password: "testing3",
@@ -106,7 +106,7 @@ func TestLoginWithUsername(t *testing.T) {
 	if user.ID!= gotUser.ID{
 		t.Fatalf(`UserService.Login(%s).ID != UserService.SignUp(params).ID`,user.ID.String() )
 	}
-    if err = us.RemoveUser(user.ID); err != nil {
+    if err = us.Remove(user.ID); err != nil {
         t.Fatalf(`UserService.RemoveUser(%s) did not delete: %v`, user.ID.String(), err)
     }
 }
@@ -116,7 +116,7 @@ func TestLoginWithEmail(t *testing.T) {
 	if err != nil {
 		t.Fatalf(`LoadUserService() did not initiate: %v`, err)
 	}
-	user, err := us.SignUp(&requests.NewUserRequest{
+	user, err := us.Create(&requests.NewUserRequest{
 		Username: "testing4",
 		Email:    "testing4@mail.com",
 		Password: "testing4",
@@ -135,7 +135,7 @@ func TestLoginWithEmail(t *testing.T) {
 	if user.ID!= gotUser.ID{
 		t.Fatalf(`UserService.Login(%s).ID != UserService.SignUp(params).ID`,user.ID.String() )
 	}
-    if err = us.RemoveUser(user.ID); err != nil {
+    if err = us.Remove(user.ID); err != nil {
         t.Fatalf(`UserService.RemoveUser(%s) did not delete: %v`, user.ID.String(), err)
     }
 }

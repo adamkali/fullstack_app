@@ -8,7 +8,7 @@ import (
 	"unicode"
 
 	"github.com/adamkali/fullstack_app/requests"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type ValidatorService struct{}

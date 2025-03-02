@@ -1,11 +1,14 @@
 package controllers
 
 import (
+	"context"
+
 	"github.com/jackc/pgx/v5"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type ControllerParams struct {
+    CTX *context.Context
     DB *pgx.Conn
 }
 

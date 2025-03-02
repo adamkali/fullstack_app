@@ -5,24 +5,25 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Token struct {
-	ID                 uuid.UUID        `json:"id"`
-	UserID             uuid.UUID        `json:"user_id"`
-	ExpirationDatetime pgtype.Timestamp `json:"expiration_datetime"`
-	Token              string           `json:"token"`
+	ID                 uuid.UUID  `json:"id"`
+	UserID             uuid.UUID  `json:"user_id"`
+	ExpirationDatetime *time.Time `json:"expiration_datetime"`
+	Token              string     `json:"token"`
 }
 
 type User struct {
-	ID              uuid.UUID        `json:"id"`
-	Email           string           `json:"email"`
-	Username        string           `json:"username"`
-	CreatedDatetime pgtype.Timestamp `json:"created_datetime"`
-	UpdatedDatetime pgtype.Timestamp `json:"updated_datetime"`
-	ProfilePicUrl   pgtype.Text      `json:"profile_pic_url"`
-	Admin           bool             `json:"admin"`
-	BCryptHash      string           `json:"b_crypt_hash"`
+	ID              uuid.UUID  `json:"id"`
+	Email           string     `json:"email"`
+	Username        string     `json:"username"`
+	CreatedDatetime *time.Time `json:"created_datetime"`
+	UpdatedDatetime *time.Time `json:"updated_datetime"`
+	ProfilePicUrl   *string    `json:"profile_pic_url"`
+	Admin           bool       `json:"admin"`
+	BCryptHash      string     `json:"b_crypt_hash"`
 }

@@ -1,0 +1,206 @@
+basePath: /api
+definitions:
+  DeleteUserResponse:
+    properties:
+      data:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  LoginResponse:
+    properties:
+      data:
+        $ref: '#/definitions/repository.User'
+      jwt:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  NewUserRequest:
+    properties:
+      email:
+        type: string
+      isAdmin:
+        type: boolean
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  UserResponse:
+    properties:
+      data:
+        $ref: '#/definitions/repository.User'
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  repository.User:
+    properties:
+      admin:
+        type: boolean
+      b_crypt_hash:
+        type: string
+      created_datetime:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      profile_pic_url:
+        type: string
+      updated_datetime:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact:
+    email: adam.kalilarosa@proton.me
+    name: Adam Kalinowski
+    url: http://github.com/adamkali/fullstack_app/wiki
+  description: This is the swagger page for the Full Stack Template. use this to test
+    your database connection
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Full Stack Template API
+  version: "0.1"
+paths:
+  /users/{user_id}:
+    delete:
+      description: get string by ID
+      operationId: DeleteUserByUUID
+      parameters:
+      - default: '"e38e78a4-2ca3-4c59-a3ea-a2019866e593"'
+        description: User Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: '"Bearer token"'
+        description: admin header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DeleteUserResponse'
+      summary: Delete User by their UUID
+      tags:
+      - Users
+  /users/current:
+    get:
+      description: Get the Current User by the uuid storred in the Claims header
+      operationId: GetCurrent
+      parameters:
+      - default: '"Bearer token"'
+        description: admin header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/UserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UserResponse'
+      summary: Get Current User
+      tags:
+      - Users
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: to a user account with either email or username
+      operationId: Login
+      parameters:
+      - description: Signup Request
+        in: body
+        name: SignupRequest
+        required: true
+        schema:
+          $ref: '#/definitions/LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/LoginResponse'
+      summary: Login
+      tags:
+      - Users
+  /users/signup:
+    post:
+      consumes:
+      - application/json
+      description: Signup using the requests.NewUserRequest
+      operationId: Signup
+      parameters:
+      - description: Signup Request
+        in: body
+        name: SignupRequest
+        required: true
+        schema:
+          $ref: '#/definitions/NewUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/LoginResponse'
+      summary: Signup to the app
+      tags:
+      - Users
+swagger: "2.0"
